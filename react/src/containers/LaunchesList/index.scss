@@ -17,7 +17,13 @@
   .search-container {
     grid-column: 1 / -1;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .total-launches {
+    font-size: 16px;
+    font-weight: 600;
   }
 
   .pagination-container {

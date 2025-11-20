@@ -29,6 +29,9 @@ export const LaunchesList = () => {
         ) : (
           <div className="launches-list">
             <div className="search-container">
+              <div className="total-launches">
+                Total ({filteredLaunches.length})
+              </div>
               <Search value={searchText} onChange={onSearchChange} />
             </div>
             {filteredLaunches
