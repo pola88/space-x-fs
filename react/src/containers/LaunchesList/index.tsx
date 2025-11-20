@@ -6,7 +6,7 @@ import { getLaunches } from "../../api";
 import "./index.scss";
 
 export const LaunchesList = () => {
-  const [launches, setLaunches] = useState<Launch[]>([]);
+  const [launches, setLaunches] = useState<Map<number, Launch>>(new Map());
   const [searchText, setSearchText] = useState<string>("");
   const { showAll } = useContext(ModeContext);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -14,7 +14,11 @@ export const LaunchesList = () => {
   const loadLaunches = async () => {
     try {
       const launches = await getLaunches();
-      setLaunches(launches);
+      const parsedLaunches: Map<number, Launch> = new Map();
+      launches.forEach((l: Launch) => {
+        parsedLaunches.set(l.flight_number, l);
+      });
+      setLaunches(parsedLaunches);
     } catch (error) {
       console.log(error);
     }
@@ -32,13 +36,44 @@ export const LaunchesList = () => {
   };
 
   const filteredLaunches = useMemo(() => {
-    return launches.filter((l: Launch) => {
+    const launchesArray: Launch[] = [];
+    launches.forEach((l: Launch) => {
       if (searchText) {
-        return l.mission_name.toLowerCase().includes(searchText.toLowerCase()) || l.favorite;
+        if (l.mission_name.toLowerCase().includes(searchText.toLowerCase())) {
+          if (showAll) {
+            launchesArray.push(l);
+          } else {
+            if (l.favorite) {
+              launchesArray.push(l);
+            }
+          }
+        }
+
+        return;
       }
-      return showAll || l.favorite;
+
+      if (showAll) {
+        launchesArray.push(l);
+        return;
+      }
+
+      if (l.favorite) {
+        launchesArray.push(l);
+        return;
+      }
     });
+
+    return launchesArray;
   }, [searchText, showAll, launches]);
+
+  const updateFavorite = (flightNumber: number) => {
+    const launch = launches.get(flightNumber);
+    if (!launch) return;
+    
+    const newLaunches = new Map(launches);
+    newLaunches.set(flightNumber, { ...launch, favorite: !launch.favorite });
+    setLaunches(newLaunches);
+  };
 
   return (
     <div className="launches-list-container">
@@ -57,7 +92,7 @@ export const LaunchesList = () => {
             <LaunchCard
               key={launch.flight_number}
               launch={launch}
-              updateFavorite={() => {}}
+              updateFavorite={updateFavorite}
             />
           ))}
           <div className="pagination-container">

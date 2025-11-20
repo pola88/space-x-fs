@@ -13,6 +13,8 @@ export const LaunchCard = ({ launch, updateFavorite }: LaunchCardProps) => {
     await (launch.favorite
       ? removeFavorite(launch.flight_number)
       : addFavorite(launch.flight_number));
+
+    updateFavorite(launch.flight_number);
   };
 
   return (
