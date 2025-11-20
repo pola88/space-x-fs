@@ -15,8 +15,14 @@
   }
 
   .search-container {
+    grid-column: 1 / -1;
     display: flex;
     justify-content: end;
-    margin-bottom: 20px;
+  }
+
+  .pagination-container {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: end;
   }
 }

@@ -42,10 +42,11 @@ export const LaunchesList = () => {
 
   return (
     <div className="launches-list-container">
-      <div className="search-container">
-        <Search value={searchText} onChange={onSearchChange} />
-      </div>
+      
       <div className="launches-list">
+        <div className="search-container">
+          <Search value={searchText} onChange={onSearchChange} />
+        </div>
         {filteredLaunches
           .filter(
             (_: Launch, i: number) =>
@@ -59,12 +60,15 @@ export const LaunchesList = () => {
               updateFavorite={() => {}}
             />
           ))}
+          <div className="pagination-container">
+          <Pagination
+            value={currentPage}
+              onChange={setCurrentPage}
+              itemsCount={filteredLaunches.length}
+            />
+        </div>
       </div>
-      <Pagination
-        value={currentPage}
-        onChange={setCurrentPage}
-        itemsCount={filteredLaunches.length}
-      />
+      
     </div>
   );
 };

@@ -15,9 +15,10 @@ export const Pagination = ({
   value,
   onChange
 }: PaginationProps) => {
+  const totalPages = Math.ceil(itemsCount / CARDS_PER_PAGE);
   const renderPages = useMemo(
     () =>
-      Array.from(Array(Math.ceil(itemsCount / CARDS_PER_PAGE)).keys()).map(
+      Array.from(Array(totalPages).keys()).map(
         (_, i) => (
           <div
             key={i}
@@ -28,19 +29,21 @@ export const Pagination = ({
           </div>
         )
       ),
-    [itemsCount, value]
+    [totalPages, value, onChange]
   );
 
   return !!itemsCount ? (
     <div className="pagination">
       <ChevronLeftIcon
         className={`chevron-left ${value === 1 ? "disabled" : ""}`}
+        onClick={() => onChange(1)}
       />
       {renderPages}
       <ChevronLeftIcon
         className={`chevron-right ${
-          value === Math.ceil(itemsCount / CARDS_PER_PAGE) ? "disabled" : ""
+          value === totalPages ? "disabled" : ""
         }`}
+        onClick={() => onChange(value + 1)}
       />
     </div>
   ) : null;
