@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Favorites = void 0;
 const typeorm_1 = require("typeorm");
+const users_1 = require("./users");
 let Favorites = class Favorites {
 };
 __decorate([
@@ -26,6 +27,11 @@ __decorate([
     (0, typeorm_1.Column)({ nullable: false }),
     __metadata("design:type", Number)
 ], Favorites.prototype, "user_id", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => users_1.Users, (user) => user.favorites),
+    (0, typeorm_1.JoinColumn)({ name: "user_id" }),
+    __metadata("design:type", users_1.Users)
+], Favorites.prototype, "user", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)

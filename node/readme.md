@@ -31,3 +31,7 @@ https://api.spacexdata.com/v3/rockets
 2. We need the app to support favoriting. Favorite controllers are already created under `node > src > controllers > favorites.ts`. Complete what should be needed to make it work.
 
 3. At this point you should already seen an `auth` middleware, let's make it worthwhile. We should be getting a token with the POST `/admin/token` endpoint, verify it and if is not valid protected endpoints should return a `401`. All endpoints should be protected.
+
+Notes:
+
+- I updated the node version to 16.10, Ideally, it would be to update to the latest version for security reasons.

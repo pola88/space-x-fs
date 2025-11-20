@@ -1,23 +1,35 @@
-import jwt from "jsonwebtoken";
+import { createUser, validateUserAndPassword } from "../services/admin";
 
 export const generateToken = async (req, res) => {
   const jwtSecretKey = process.env.JWT_SECRET_KEY;
-  const userId = req.body.userId;
+  const email = req.body.email;
+  const password = req.body.password;
 
   if (!jwtSecretKey) {
-    res.status(400).send("JWT Secret not set");
+    return res.status(400).send({ error: "JWT Secret not set" });
   }
 
-  if (!userId) {
-    res.status(400).send("UserId not set");
+  if (!email || !password) {
+    return res.status(400).send({ error: "Email or password not set" });
   }
 
-  const data = {
-    time: Date(),
-    userId
-  };
+  try {
+    const { token } = await validateUserAndPassword(email, password);
+    return res.status(201).send({ token });
+  } catch (error) {
+    return res.status(400).send({ error: error.message });
+  } 
+};
 
-  const token = jwt.sign(data, jwtSecretKey);
+export const signup = async (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
 
-  res.send({ token });
+  try {
+    const { user, token } = await createUser(email, password);
+    return res.status(201).send({ token });
+  } catch (error) {
+    return res.status(400).send({ error: error.message });
+  }
+  
 };

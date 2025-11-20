@@ -1,6 +1,7 @@
 {
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "test/**/*"
   ],
   "exclude": [
     "node_modules"
@@ -18,6 +19,10 @@
     "typeRoots": [
       "type-modules",
       "node_modules/@types"
+    ],
+    "types": [
+      "jest",
+      "node"
     ],
     "lib": [
       "es5",

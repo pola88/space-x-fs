@@ -1,10 +1,13 @@
 import "./index.scss";
+import { login } from "api";
+import { Link } from "react-router-dom";
+import { UserForm } from "components/UserForm";
 
 export const Login = () => {
-  const handleLogin = async () => {
-    // 2
+  const handleLogin = async (email: string, password: string) => {
+    const response = await login(email, password);
+    return response.token;
   };
-
   return (
     <div className="login-page">
       <img
@@ -12,9 +15,9 @@ export const Login = () => {
         alt="DEPT®"
         title="DEPT®"
       />
-      <button onClick={handleLogin} className="glow-on-hover">
-        LOG IN
-      </button>
+      <UserForm onSubmit={handleLogin} buttonText="Log in" />
+      
+      <Link to="/signup">Sign up</Link>
     </div>
   );
 };

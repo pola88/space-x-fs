@@ -1,15 +1,16 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import { Launch } from '../types/launch';
+import { Rocket } from '../types/rocket';
 
-const fetchData = async (url) => {
+const fetchData = async <T>(url: string): Promise<T> => {
   try {
-    const response = await axios.get(url);
+    const response: AxiosResponse<T> = await axios.get(url);
     return response.data;
   } catch (error) {
     console.error(error);
-    return {};
+    return [] as T;
   }
-
 };
 
-export const fetchLaunches = async () => fetchData(`${process.env.SPACEX_API_URL}/launches`);
-export const fetchRockets = async () => fetchData(`${process.env.SPACEX_API_URL}/rockets`);
+export const fetchLaunches = async (): Promise<Launch[]> => fetchData<Launch[]>(`${process.env.SPACEX_API_URL}/launches`);
+export const fetchRockets = async (): Promise<Rocket[]> => fetchData<Rocket[]>(`${process.env.SPACEX_API_URL}/rockets`);

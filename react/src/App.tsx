@@ -1,7 +1,7 @@
-import { useEffect, useContext } from "react";
+import { useContext } from "react";
 import { Layout } from "components";
 import { AuthContext } from "contexts/AuthContext";
-import { Login } from "pages";
+import { Login, SignUp } from "pages";
 import { Routes, Route } from "react-router-dom";
 import ModeProvider from "./contexts/ModeContext";
 import { LaunchesList } from "./containers";
@@ -25,7 +25,10 @@ export default function App() {
             }
           />
         ) : (
-          <Route path="/" element={<Login />} />
+          <>
+            <Route path="/" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+          </>
         )}
       </Routes>
     </div>

@@ -1,0 +1,20 @@
+.user-form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+
+  & .input-container {
+    margin-bottom: 20px;
+  }
+
+  & .input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 198px;
+  }
+
+  button {
+    margin-bottom: 20px;
+  }
+}

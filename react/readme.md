@@ -13,3 +13,7 @@ The exercise consists of building some missing parts on an application to view S
 3. Under `src > containers > LaunchesList > index.tsx` you will find the previous Search component being used, let’s give it a try and complete it with the functionality needed to make the input look for mission_name.
 
 4. The best part of this exercise (? is about the favorite functionality. The start svg is already hitting add and remove favorite endpoints but we are not updating our local launches array. What should be the most efficient way of doing this?
+
+## Notes
+
+- We should update the node version for security reasons

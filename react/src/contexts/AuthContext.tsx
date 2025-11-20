@@ -20,12 +20,12 @@ export const AuthContext = createContext<AuthProviderValue>({
 });
 
 export const AuthProvider = ({ children }: { children: ReactElement }) => {
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
-      axios.defaults.headers.common["Authorization"] = token;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       localStorage.setItem("token", token);
       navigate("/");
     }

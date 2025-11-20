@@ -8,26 +8,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateToken = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+exports.signup = exports.generateToken = void 0;
+const admin_1 = require("../services/admin");
 const generateToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const jwtSecretKey = process.env.JWT_SECRET_KEY;
-    const userId = req.body.userId;
+    console.log(req.body);
+    const email = req.body.email;
+    const password = req.body.password;
     if (!jwtSecretKey) {
-        res.status(400).send("JWT Secret not set");
+        return res.status(400).send("JWT Secret not set");
     }
-    if (!userId) {
-        res.status(400).send("UserId not set");
+    if (!email || !password) {
+        return res.status(400).send("Email or password not set");
     }
-    const data = {
-        time: Date(),
-        userId
-    };
-    const token = jsonwebtoken_1.default.sign(data, jwtSecretKey);
-    res.send({ token });
+    try {
+        const { token } = yield (0, admin_1.validateUserAndPassword)(email, password);
+        return res.status(201).send({ token });
+    }
+    catch (error) {
+        return res.status(400).send(error.message);
+    }
 });
 exports.generateToken = generateToken;
+const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body.email;
+    const password = req.body.password;
+    try {
+        const { user, token } = yield (0, admin_1.createUser)(email, password);
+        return res.status(201).send({ token });
+    }
+    catch (error) {
+        return res.status(400).send(error.message);
+    }
+});
+exports.signup = signup;
