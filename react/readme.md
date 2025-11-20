@@ -17,3 +17,4 @@ The exercise consists of building some missing parts on an application to view S
 ## Notes
 
 - We should update the node version for security reasons
+- To improve the performance, we can move the pagination to the backend, the same for the search

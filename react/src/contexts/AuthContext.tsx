@@ -21,6 +21,7 @@ export const AuthContext = createContext<AuthProviderValue>({
 
 export const AuthProvider = ({ children }: { children: ReactElement }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+  const [isInitialized, setIsInitialized] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,11 +30,12 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
       localStorage.setItem("token", token);
       navigate("/");
     }
+    setIsInitialized(true);
   }, [token, navigate]);
 
   return (
     <AuthContext.Provider value={{ token, setToken }}>
-      {children}
+      { isInitialized ? children : null }
     </AuthContext.Provider>
   );
 };

@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useState, useMemo } from "react";
 import { ModeContext } from "contexts/ModeContext";
 import { Launch } from "types";
 import { LaunchCard, Search, Pagination, CARDS_PER_PAGE } from "components";
@@ -7,18 +7,9 @@ import "./index.scss";
 
 export const LaunchesList = () => {
   const [launches, setLaunches] = useState<Launch[]>([]);
-  const [filteredLaunches, setFilteredLaunches] = useState<Launch[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const { showAll } = useContext(ModeContext);
   const [currentPage, setCurrentPage] = useState<number>(1);
-
-  const filterLaunches = () => {
-    setCurrentPage(1);
-    // 3
-    return setFilteredLaunches(
-      launches.filter((l: Launch) => showAll || l.favorite)
-    );
-  };
 
   const loadLaunches = async () => {
     try {
@@ -32,12 +23,28 @@ export const LaunchesList = () => {
   useEffect(() => {
     loadLaunches();
   }, []);
+  
+  const onSearchChange = (value: string) => {
+    if (value !== searchText) {
+      setSearchText(value);
+      setCurrentPage(1);
+    }
+  };
 
-  useEffect(filterLaunches, [searchText, showAll, launches]);
+  const filteredLaunches = useMemo(() => {
+    return launches.filter((l: Launch) => {
+      if (searchText) {
+        return l.mission_name.toLowerCase().includes(searchText.toLowerCase()) || l.favorite;
+      }
+      return showAll || l.favorite;
+    });
+  }, [searchText, showAll, launches]);
 
   return (
     <div className="launches-list-container">
-      <Search value={searchText} onChange={setSearchText} />
+      <div className="search-container">
+        <Search value={searchText} onChange={onSearchChange} />
+      </div>
       <div className="launches-list">
         {filteredLaunches
           .filter(

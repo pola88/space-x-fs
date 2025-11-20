@@ -1,16 +1,26 @@
-import { useState, SetStateAction, Dispatch } from "react";
+import { useState } from "react";
 import searchIcon from "assets/images/search.svg";
 import closeIcon from "assets/images/close.svg";
 import "./index.scss";
 
-interface SeachProps {
+interface SearchProps {
   value: string;
-  onChange: Dispatch<SetStateAction<string>>;
+  onChange: (value: string) => void;
 }
 
-export const Search = ({ value, onChange }: SeachProps) => {
+export const Search = ({ value, onChange }: SearchProps) => {
+  const [currentValue, setCurrentValue] = useState(value);
   const clear = () => {
     onChange("");
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentValue(e.target.value);
+    const newValue = e.target.value.trim();
+    if (newValue.length > 3) {
+      onChange(newValue);
+    } else {
+      onChange("");
+    }
   };
 
   return (
@@ -18,10 +28,10 @@ export const Search = ({ value, onChange }: SeachProps) => {
       <img className="search-icon" src={searchIcon} alt="Search" />
       <input
         type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        value={currentValue}
+        onChange={handleChange}
       />
-      <img className="close-icon" src={closeIcon} onClick={clear} alt="Close" />
+      {currentValue && <img className="close-icon" src={closeIcon} onClick={clear} alt="Close" />}
     </div>
   );
 };
