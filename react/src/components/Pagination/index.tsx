@@ -32,7 +32,9 @@ export const Pagination = ({
     [totalPages, value, onChange]
   );
 
-  return !!itemsCount ? (
+  if (totalPages <= 1) return null;
+
+  return (
     <div className="pagination">
       <ChevronLeftIcon
         className={`chevron-left ${value === 1 ? "disabled" : ""}`}
@@ -46,5 +48,5 @@ export const Pagination = ({
         onClick={() => onChange(value + 1)}
       />
     </div>
-  ) : null;
+  );
 };
