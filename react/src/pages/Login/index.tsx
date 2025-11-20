@@ -17,7 +17,7 @@ export const Login = () => {
       />
       <UserForm onSubmit={handleLogin} buttonText="Log in" />
       
-      <Link to="/signup">Sign up</Link>
+      <Link className="link" to="/signup">Sign up</Link>
     </div>
   );
 };

@@ -4,9 +4,10 @@ import { getLaunches } from "api/launches";
 
 export const useLaunchList = (searchText: string, showAll: boolean) => {
   const [launches, setLaunches] = useState<Map<number, Launch>>(new Map());
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const loadLaunches = async () => {
     try {
+      setIsLoading(true);
       const launches = await getLaunches();
       const parsedLaunches: Map<number, Launch> = new Map();
       launches.forEach((l: Launch) => {
@@ -15,6 +16,8 @@ export const useLaunchList = (searchText: string, showAll: boolean) => {
       setLaunches(parsedLaunches);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -62,5 +65,5 @@ export const useLaunchList = (searchText: string, showAll: boolean) => {
     return launchesArray;
   }, [launches, searchText, showAll]);
 
-  return { filteredLaunches, updateFavorite };
+  return { filteredLaunches, updateFavorite, isLoading };
 };

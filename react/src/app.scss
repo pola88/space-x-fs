@@ -75,9 +75,24 @@ body {
   border-radius: 10px;
 }
 
-button:disabled {
+.glow-on-hover:disabled {
+  background-color: #383838;
   opacity: 0.5;
   cursor: not-allowed;
+
+  &:before {
+    background: #383838;
+    opacity: 0;
+  }
+
+  &:after {
+    background: #383838;
+    opacity: 0;
+  }
+}
+
+button {
+  text-transform: uppercase;
 }
 
 .error-message {

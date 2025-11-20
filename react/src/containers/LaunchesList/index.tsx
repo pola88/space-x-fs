@@ -4,13 +4,14 @@ import { Launch } from "types";
 import { LaunchCard, Search, Pagination, CARDS_PER_PAGE } from "components";
 import "./index.scss";
 import { useLaunchList } from "hooks/useLaunchList";
+import loadingGif from "assets/gifs/rocket.gif";
 
 export const LaunchesList = () => {
   const [searchText, setSearchText] = useState<string>("");
   const { showAll } = useContext(ModeContext);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const { filteredLaunches, updateFavorite } = useLaunchList(searchText, showAll);
+  const { filteredLaunches, updateFavorite, isLoading } = useLaunchList(searchText, showAll);
 
   const onSearchChange = (value: string) => {
     if (value !== searchText) {
@@ -21,33 +22,37 @@ export const LaunchesList = () => {
 
   return (
     <div className="launches-list-container">
-      
-      <div className="launches-list">
-        <div className="search-container">
-          <Search value={searchText} onChange={onSearchChange} />
-        </div>
-        {filteredLaunches
-          .filter(
-            (_: Launch, i: number) =>
-              i >= CARDS_PER_PAGE * (currentPage - 1) &&
-              i < CARDS_PER_PAGE * currentPage
-          )
-          .map((launch, i) => (
-            <LaunchCard
-              key={launch.flight_number}
-              launch={launch}
-              updateFavorite={updateFavorite}
-            />
-          ))}
-          <div className="pagination-container">
-          <Pagination
-            value={currentPage}
-              onChange={setCurrentPage}
-              itemsCount={filteredLaunches.length}
-            />
-        </div>
-      </div>
-      
+        {isLoading ? (
+          <div className="loading">
+            <img className="loading-gif" src={loadingGif} alt="Loading" />
+          </div>
+        ) : (
+          <div className="launches-list">
+            <div className="search-container">
+              <Search value={searchText} onChange={onSearchChange} />
+            </div>
+            {filteredLaunches
+              .filter(
+                (_: Launch, i: number) =>
+                  i >= CARDS_PER_PAGE * (currentPage - 1) &&
+                  i < CARDS_PER_PAGE * currentPage
+              )
+              .map((launch, i) => (
+                <LaunchCard
+                  key={launch.flight_number}
+                  launch={launch}
+                  updateFavorite={updateFavorite}
+                />
+            ))}
+            <div className="pagination-container">
+              <Pagination
+                value={currentPage}
+                  onChange={setCurrentPage}
+                  itemsCount={filteredLaunches.length}
+                />
+            </div>
+          </div>
+        )}
     </div>
   );
 };
