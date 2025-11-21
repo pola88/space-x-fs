@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useCallback } from "react";
 import { ModeContext } from "contexts/ModeContext";
 import { Launch } from "types";
 import { LaunchCard, Search, Pagination, CARDS_PER_PAGE } from "components";
@@ -13,12 +13,14 @@ export const LaunchesList = () => {
 
   const { filteredLaunches, updateFavorite, isLoading } = useLaunchList(searchText, showAll);
 
-  const onSearchChange = (value: string) => {
-    if (value !== searchText) {
-      setSearchText(value);
-      setCurrentPage(1);
-    }
-  };
+  const onSearchChange = useCallback((value: string) => {
+      if (value !== searchText) {
+        setSearchText(value);
+        setCurrentPage(1);
+      }
+    },
+    [searchText]
+  );
 
   return (
     <div className="launches-list-container">

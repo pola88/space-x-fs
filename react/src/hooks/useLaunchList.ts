@@ -1,11 +1,11 @@
 import { Launch } from "types/launch";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { getLaunches } from "api/launches";
 
 export const useLaunchList = (searchText: string, showAll: boolean) => {
   const [launches, setLaunches] = useState<Map<number, Launch>>(new Map());
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const loadLaunches = async () => {
+  const loadLaunches = useCallback(async () => {
     try {
       setIsLoading(true);
       const launches = await getLaunches();
@@ -19,20 +19,20 @@ export const useLaunchList = (searchText: string, showAll: boolean) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadLaunches();
-  }, []);
+  }, [loadLaunches]);
 
-  const updateFavorite = (flightNumber: number) => {
+  const updateFavorite = useCallback((flightNumber: number) => {
     const launch = launches.get(flightNumber);
     if (!launch) return;
     
     const newLaunches = new Map(launches);
     newLaunches.set(flightNumber, { ...launch, favorite: !launch.favorite });
     setLaunches(newLaunches);
-  };
+  }, [launches]);
 
   const filteredLaunches = useMemo(() => {
     const launchesArray: Launch[] = [];

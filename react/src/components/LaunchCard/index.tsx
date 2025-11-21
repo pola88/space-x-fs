@@ -1,4 +1,5 @@
 import { Launch } from "types";
+import React, { useCallback } from "react";
 import { addFavorite, removeFavorite } from "api/favorites";
 import { ReactComponent as Star } from "assets/images/star.svg";
 import "./index.scss";
@@ -8,14 +9,14 @@ interface LaunchCardProps {
   updateFavorite: Function;
 }
 
-export const LaunchCard = ({ launch, updateFavorite }: LaunchCardProps) => {
-  const handleClickFavorite = async () => {
+export const LaunchCard = React.memo(({ launch, updateFavorite }: LaunchCardProps) => {
+  const handleClickFavorite = useCallback(async () => {
     await (launch.favorite
       ? removeFavorite(launch.flight_number)
       : addFavorite(launch.flight_number));
 
     updateFavorite(launch.flight_number);
-  };
+  }, [launch.flight_number, launch.favorite, updateFavorite]);
 
   return (
     <div className="launch-card">
@@ -36,4 +37,4 @@ export const LaunchCard = ({ launch, updateFavorite }: LaunchCardProps) => {
       </div>
     </div>
   );
-};
+});
