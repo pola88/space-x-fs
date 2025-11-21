@@ -25,6 +25,14 @@ describe("admin controller", () => {
     expect(res.send).toHaveBeenCalledWith({ token: expect.any(String) });
   });
 
+  it("should return 401 when the email or password is incorrect", async () => {
+    const req = { body: { email: "test@test.com", password: "password" } };
+    const res = { status: jest.fn().mockReturnThis(), send: jest.fn() };
+    await generateToken(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.send).toHaveBeenCalledWith({ error: 'Email or password is incorrect' });
+  });
+
   it("should return 400 if the userId is not set", async () => {
     const req = { body: {} };
     const res = { status: jest.fn().mockReturnThis(), send: jest.fn() };

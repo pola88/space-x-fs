@@ -27,11 +27,11 @@ export const validateUserAndPassword = async (email: string, password: string): 
   const usersRepo = AppDataSource.getRepository(Users);
   const user = await usersRepo.findOne({ where: { email } });
   if (!user) {
-    throw new Error("User not found");
+    throw new Error("Email or password is incorrect");
   }
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
-    throw new Error("Invalid password");
+    throw new Error("Email or password is incorrect");
   }
 
   const token = generateToken(user);

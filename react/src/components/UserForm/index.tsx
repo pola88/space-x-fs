@@ -69,21 +69,23 @@ export const UserForm = ({ onSubmit, buttonText }: UserFormProps) => {
     setPassword(e.target.value);
   };
 
+  const disableButton = Boolean(!email || !password || error.email || error.password);
+
   return (
     <form className="user-form" onSubmit={handleSubmit}>
       <div className="input-container">
         <input className="input" type="email" placeholder="Email" value={email} onChange={handleEmailChange} autoComplete="off" />
-        {error.email && <p className="error-message">{error.email}</p>}
+        {error.email && <div className="error-message error-validation">{error.email}</div>}
       </div>
 
       <div className="input-container">
         <input className="input" type="password" placeholder="Password" value={password} onChange={handlePasswordChange} autoComplete="off" />
-        {error.password && <p className="error-message">{error.password}</p>}
+        {error.password && <div className="error-message error-validation">{error.password}</div>}
       </div>
-      <button type="submit" disabled={!email || !password} className="glow-on-hover">
+      <button type="submit" disabled={disableButton} className="glow-on-hover">
         {buttonText}
       </button>
-      {error.general && <p className="error-message">{error.general}</p>}
+      {error.general && <div className="error-message error-general">{error.general}</div>}
     </form>
   );
 };
