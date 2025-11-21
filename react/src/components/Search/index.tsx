@@ -1,7 +1,7 @@
 import { useState } from "react";
 import searchIcon from "assets/images/search.svg";
 import closeIcon from "assets/images/close.svg";
-import { debounce } from "utils/debounce";
+import { useDebounce } from "hooks/useDebounce";
 import "./index.scss";
 
 interface SearchProps {
@@ -16,7 +16,7 @@ export const Search = ({ value, onChange }: SearchProps) => {
     setCurrentValue("");
   };
 
-  const debouncedOnChange = debounce(onChange, 500);
+  const debouncedOnChange = useDebounce(onChange, 500);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentValue(e.target.value);
     const newValue = e.target.value.trim();
